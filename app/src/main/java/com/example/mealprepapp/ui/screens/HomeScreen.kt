@@ -7,13 +7,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mealprepapp.viewmodel.MealViewModel
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
-    mealViewModel: MealViewModel
+    navController: NavController
 ) {
     Column(
         modifier = modifier
@@ -25,7 +23,7 @@ fun HomeScreen(
 
         Button(
             onClick = {
-                // Add Meals to DB
+                navController.navigate("addMeal")
             },
             modifier = Modifier.fillMaxWidth()
         ) {
