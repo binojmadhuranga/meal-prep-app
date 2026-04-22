@@ -25,6 +25,16 @@ class MealViewModel(private val repository: MealRepository) : ViewModel() {
         }
     }
 
+    fun searchMealsByName(query: String) {
+        viewModelScope.launch {
+            meals = if (query.isBlank()) {
+                emptyList()
+            } else {
+                repository.searchMealsByName(query)
+            }
+        }
+    }
+
     fun saveMealsToDatabase() {
         viewModelScope.launch {
             repository.insertMeals(SeedMeals.items)

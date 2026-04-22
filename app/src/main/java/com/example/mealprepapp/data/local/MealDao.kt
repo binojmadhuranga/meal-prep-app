@@ -17,6 +17,9 @@ interface MealDao {
     @Query("SELECT * FROM meals")
     suspend fun getAllMeals(): List<MealEntity>
 
+    @Query("SELECT * FROM meals WHERE LOWER(meal) LIKE '%' || LOWER(:query) || '%'")
+    suspend fun searchMealsByName(query: String): List<MealEntity>
+
     @Query("""
         SELECT * FROM meals
         WHERE LOWER(meal) LIKE '%' || LOWER(:query) || '%'

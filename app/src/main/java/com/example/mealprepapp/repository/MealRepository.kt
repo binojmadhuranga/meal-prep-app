@@ -17,6 +17,10 @@ class MealRepository(private val mealDao: MealDao) {
         return mealDao.getAllMeals()
     }
 
+    suspend fun searchMealsByName(query: String): List<MealEntity> {
+        return mealDao.searchMealsByName(query)
+    }
+
     suspend fun searchMeals(query: String): List<MealEntity> {
         return mealDao.searchMeals(query)
     }
