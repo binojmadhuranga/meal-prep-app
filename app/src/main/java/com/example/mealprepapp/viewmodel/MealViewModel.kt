@@ -15,6 +15,15 @@ class MealViewModel(private val repository: MealRepository) : ViewModel() {
     var meals by mutableStateOf(listOf<MealEntity>())
         private set
 
+    var webMeals by mutableStateOf(listOf<MealEntity>())
+        private set
+
+    var isWebSearchLoading by mutableStateOf(false)
+        private set
+
+    var webSearchError by mutableStateOf<String?>(null)
+        private set
+
     fun searchMealsByIngredient(query: String) {
         viewModelScope.launch {
             meals = if (query.isBlank()) {
@@ -47,6 +56,31 @@ class MealViewModel(private val repository: MealRepository) : ViewModel() {
             repository.insertMeal(meal)
             meals = repository.getAllMeals()
             onSaved()
+        }
+    }
+
+    fun searchMealsFromWeb(query: String) {
+        if (query.isBlank()) {
+            webMeals = emptyList()
+            webSearchError = "Please enter a meal name"
+            return
+        }
+
+        viewModelScope.launch {
+            isWebSearchLoading = true
+            webSearchError = null
+
+            try {
+                webMeals = repository.searchMealsFromWeb(query)
+                if (webMeals.isEmpty()) {
+                    webSearchError = "No meals found for '$query'"
+                }
+            } catch (_: Exception) {
+                webMeals = emptyList()
+                webSearchError = "Failed to fetch meals from web"
+            } finally {
+                isWebSearchLoading = false
+            }
         }
     }
 }
